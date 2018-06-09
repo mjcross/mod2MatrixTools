@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="mod2matrixtools.js"></script>
+        <link rel="stylesheet" type="text/css" href="mod2matrixtools.css">
+        <title>Mod 2 Matrix Tools</title>
+    </head>
+    <body>
+        <p class="header">copyleft <span class="copy-left">&copy;</span> mjcross 2018</p>
+        <h2 class="no-top-margin">Modulo 2 Matrix Tools</h2>
+        <div id="tool-select">
+            <button type="button" onclick="selectTool('bkm')">Berlekamp-Massey</button>
+            <button type="button" onclick="selectTool('reduce')">Simplify a Linear System</button>
+            <button type="button" onclick="selectTool('invert')">Invert a Matrix</button>
+            <button type="button" onclick="selectTool('multiply')">Multiply Matrices</button>
+            <button type="button" onclick="selectTool('transpose')">Transpose a Matrix</button>
+            <button type="button" onclick="selectTool('flip')">Flip a Matrix</button>
+        </div>
+
+        <!-- short description of what the tool does -->
+		<div class="shortDescription">
+            <p class="bkm hidden">The Berlekamp-Massey algorithm finds the simplest
+            linear feedback shift register (LFSR) that generates a given binary sequence.</p>
+            <p class="reduce hidden">This tool simplifies a system of linear equations using
+            Gaussian elimination.</p>
+            <p class="invert hidden">This tool inverts a square matrix using the Gauss-Jordan
+            method.</p>
+            <p class="multiply hidden">This tool calculates the product of two matrices.</p>
+            <p class="transpose hidden">This tool calculates the transpose of a matrix.</p>
+            <p class="flip hidden">This tool flips a matrix.</p>
+        </div>
+
+        <!-- tool interaction area -->
+        <div id="input-area" class="bkm reduce invert multiply transpose flip hidden">
+            <p class="bkm hidden no-top-margin">Paste a sequence into the box and press 'calculate'.</p>
+            <p class="reduce invert transpose flip hidden no-top-margin">Paste a matrix into the box and
+            press 'calculate'.</p>
+            <p class="multiply hidden no-top-margin" >Paste a matrix into each box and press 'calculate'.</p>
+            </p>
+
+            <span class="bkm hidden">
+                <p>
+                    <code>
+                        Optionally end with a semicolon, all other punctuation and whitespace is ignored.<br>
+                        Example: 11011 01010 00001 00111 01100;
+                    </code>
+                </p>
+            </span>
+                    
+            <span class="reduce invert multiply transpose flip hidden">
+                <p>
+                    <code>
+                        End each row with a semicolon, all other punctuation and whitespace is ignored.<br>
+                        Example: 1100; 1110; 1101; 0111;
+                    </code>
+                </p>
+            </span>
+
+            <!-- text input areas -->
+            <input type="text" id="text-input" class="bkm reduce invert transpose flip hidden" size="90%">
+            <div class="multiply hidden">
+                <p>A<input type="text" id="text-input-a" size="90%" class="extra-margin-left"></p>
+                <p>B<input type="text" id="text-input-b" size="90%" class="extra-margin-left"></p>
+            </div>
+
+            <!-- action buttons -->
+            <div style="display: inline-block">
+                <button type="button" class="bkm hidden" onclick="bkmButton()">Calculate</button>
+                <button type="button" class="invert hidden" onclick="invertButton()">Calculate</button>
+                <button type="button" class="reduce hidden" onclick="reduceButton()">Calculate</button>
+                <button type="button" class="multiply hidden" onclick="multiplyButton()">Calculate</button>
+                <button type="button" class="transpose hidden" onclick="transposeButton()">Calculate</button>
+                <button type="button" class="flip hidden" onclick="flipButton()">Calculate</button>
+            </div>
+            <button type="button" onClick="resetButton()">Reset</button>
+            
+            <!-- output area -->
+            <div id="output-area" class="hidden">
+                <p class="bkm hidden">Calculated LFSR:</p>
+                <p class="invert hidden">Inverse matrix:</p>
+                <p class="reduce hidden">Simplified system:</p>
+                <p class="multiply hidden">Result of A &times; B:</p>
+                <p class="transpose hidden">Transposed matrix:</p>
+                <p class="flip hidden">Flipped matrix:</p>
+
+                <!-- matrix result area -->
+                <div id="matrix-result-area">
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes area -->
+        <div id="notes-area">
+            <div class="bkm hidden">
+                <p>Note that to characterise an LFSR of length 'N' requires a sample of 2N bits or more.</p>
+            </div>
+            <div class="reduce hidden">
+                <p>To simplify a set of linear equations, form a matrix from the coefficients
+                of the unknowns with the known values as an extra column on the right.</p>
+                <p>For example the system 
+                <span class="inline-equation">
+                    <code>
+                    0.a + 1.b + 1.c = 0<br>
+                    1.a + 0.b + 1.c = 1<br>
+                    1.a + 1.b + 1.c = 1
+                    </code>
+                </span>
+                can be represented by the matrix 
+                <span class="inline-equation">
+                    <code>
+                    0,1,1,0;<br>
+                    1,0,1,1;<br>
+                    1,1,1,1;
+                    </code>
+                </span>
+                which simplifies to
+                <span class="inline-equation">
+                    <code>
+                    1,0,0,1;<br>
+                    0,1,0,0;<br>
+                    0,0,1,0;
+                    </code>
+                </span>
+                </p>
+                <p>
+                The simplified matrix corresponds to the system 
+                <span class="inline-equation">
+                    <code>
+                    1.a + 0.b + 0.c = 1<br>
+                    0.a + 1.b + 0.c = 0<br>
+                    0.a + 0.b + 1.c = 0
+                    </code>
+                </span>
+                from which it is evident that the solution is
+                <span class="inline-equation">
+                    <code>
+                    a = 1<br>
+                    b = 0<br>
+                    c = 0
+                    </code>
+                </span>
+                </p>
+                <p>
+                    Note that not every system can be reduced to a unique solution but most can be simplified.
+                </p>
+            </div>
+
+            <div class="invert hidden">
+                <p>
+                    The inverse matrix can be used to reverse the effect of a linear transformation.
+                </p>
+                <p>
+                    For example consider a transformation that maps any point
+                    <span class="inline-equation"><code>(x,y,z)</code></span>
+                    to another point
+                    <span class="inline-equation"><code>(p,q,r)</code></span>
+                    where
+                    <span class="inline-equation"><code>
+                            p = 1.x + 0.y + 1.z<br>
+                            q = 1.x + 1.y + 0.z<br>
+                            r = 0.x + 1.y + 0.z
+                    </code></span>
+                </p>
+                <p>
+                    In matrix notation we can write
+                    <span class="inline-equation"><code>
+                            p<br>
+                            q<br>
+                            r
+                    </code></span>
+                    =
+                    <span class="inline-equation"><code>
+                            1,0,1;<br>
+                            1,1,0;<br>
+                            0,1,0;
+                    </code></span>
+                    &times;
+                    <span class="inline-equation"><code>
+                            x<br>
+                            y<br>
+                            z
+                    </code></span>
+                </p>
+                <p>
+                    The inverse matrix is
+                    <span class="inline-equation"><code>
+                            0,1,1;<br>
+                            0,0,1;<br>
+                            1,1,1;
+                    </code></span>
+                    which tells us that we can map any
+                    <span class="inline-equation"><code>(p,q,r)</code></span>
+                    back to
+                    <span class="inline-equation"><code>(x,y,z)</code></span>
+                    by using
+                    <span class="inline-equation"><code>
+                            x = 0.p + 1.q + 1.r<br>
+                            y = 0.p + 0.q + 1.r<br>
+                            z = 1.p + 1.q + 1.r
+                    </code></span>
+                </p>
+                <p>
+                    Note that a matrix corresponding to an irreversible transformation cannot be inverted.
+                </p>
+            </div>
+
+            <div class="multiply hidden">
+                <p>Note that with matrix multiplication the order matters, so A &times; B &ne; B &times; A</p>
+            </div>
+
+            <div class="transpose hidden">
+                <p>The transpose of a matrix swaps rows to columns and visa versa.</p>
+            </div>
+
+            <div class="flip hidden">
+                <p>Flipping a matrix reverses the order of its rows and columns.</p>
+            </div>
+            
+        </div>
+        
+    </body>
+</html>

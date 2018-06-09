@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f2eee6;
+}
+
+.header {
+    color: darkgrey;
+    text-align: right;
+    font-size: 50%;
+    font-style: italic;
+    bottom-margin: 0px;
+}
+
+.copy-left {
+    display: inline-block;
+    text-align: right;
+    margin: 0px; 
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+.hidden {
+    display: none;
+}
+
+.no-top-margin {
+    margin-top: 0px;
+}
+
+.extra-margin-left {
+    margin-left: 15px;
+}
+
+.inline-equation {
+    display: inline-block;
+    vertical-align: middle; 
+    padding-left: 7px; 
+    padding-right: 7px
+}
+
+#tool-select > Button {
+    margin: 5px;
+}
+
+#input-area {
+    padding: 20px;
+    margin: 20px;
+    background-color: #d1cdc4
+}
+
+#input-area > Button {
+    margin-top: 10px;
+}
+
+#output-area > P {
+    margin-bottom: 5px;
+}
+
+#notes-area {
+    font-size: 75%;
+}
